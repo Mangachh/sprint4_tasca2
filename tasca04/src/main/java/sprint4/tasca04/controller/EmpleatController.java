@@ -29,6 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import sprint4.tasca04.model.Empleat;
 import sprint4.tasca04.repository.EmpleatRepo;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 public class EmpleatController {
@@ -184,7 +186,7 @@ public class EmpleatController {
 
     }
 
-    @Operation(summary = "Fallback exit for the /update/id/. If no ID is supplied, then the call goes here.")
+    @Operation(summary = "Fallback exit for the /update/{id}. If no ID is supplied, then the call goes here.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "No ID supplied")
     })
@@ -195,10 +197,21 @@ public class EmpleatController {
         return new ResponseEntity<>("No id found", headers, HttpStatus.BAD_REQUEST);
     }
 
-    // vamos a subir la foto
+    @Operation(summary = "Updates an empleat by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "No image selected"),
+            @ApiResponse(responseCode = "404", description = "Not found an Empleat with the Id supplied"),
+            @ApiResponse(responseCode = "200", description = "Update succesful")
+    })
     @PostMapping("set/photo/{id}")
     public ResponseEntity<Empleat> setPhoto(@PathVariable(name = "id") int id,
-            @RequestParam(name = "image") MultipartFile image) throws IOException {
+            @Parameter(description = "Image to load") @RequestParam(name = "image") MultipartFile image) throws IOException {
+        
+        if(image == null){
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Error", "Not Image selected: " + String.valueOf(id));
+            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        }
 
         // pillamos el empleado
         Empleat empleat = repo.getEmpleat(id);
@@ -220,6 +233,24 @@ public class EmpleatController {
         return new ResponseEntity<>(empleat, HttpStatus.OK);
     }
 
+
+    @Operation(summary = "Fallback exit for the /set/photo/{id}. If no ID is supplied, then the call goes here.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "No ID supplied")
+    })
+    @PutMapping("set/photo/")
+    public ResponseEntity<String> setPhotoNoId() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Error", "\"id\" parameter not found");
+        return new ResponseEntity<>("No id found", headers, HttpStatus.BAD_REQUEST);
+    }
+
+    @Operation(summary = "Updates an empleat by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "The empleat doesn't have a photo"),
+            @ApiResponse(responseCode = "400", description = "Not found an Empleat with the Id supplied"),
+            @ApiResponse(responseCode = "200", description = "Update succesful")
+    })
     @GetMapping("/get/photo/{id}")
     public ResponseEntity<Resource> getPhoto(@PathVariable(name = "id") int id) throws IOException {
         Empleat empleat = repo.getEmpleat(id);
@@ -242,5 +273,18 @@ public class EmpleatController {
 
         return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(res.contentLength()).contentType(MediaType.IMAGE_JPEG).body(res);
     }
+
+
+    @Operation(summary = "Fallback exit for the /get/photo/{id}. If no ID is supplied, then the call goes here.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "No ID supplied")
+    })
+    @PutMapping("get/photo/")
+    public ResponseEntity<String> getPhotoNoId() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Error", "\"id\" parameter not found");
+        return new ResponseEntity<>("No id found", headers, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
