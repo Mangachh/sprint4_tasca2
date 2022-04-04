@@ -237,10 +237,10 @@ public class EmpleatController {
         }
         String loadPath = SAVE_PATH + empleat.getId();
 
-        ByteArrayResource res = FileUploadUtil.loadFile("empleat-photos/" + empleat.getId(), empleat.getPhoto());
+        ByteArrayResource res = FileUploadUtil.loadFile(loadPath, empleat.getPhoto());
         //return new ResponseEntity<ByteArrayResource>(res, HttpStatus.OK); 
 
-        return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(res.contentLength()).contentType(MediaType.APPLICATION_OCTET_STREAM).body(res);
+        return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(res.contentLength()).contentType(MediaType.IMAGE_JPEG).body(res);
     }
 
 }
