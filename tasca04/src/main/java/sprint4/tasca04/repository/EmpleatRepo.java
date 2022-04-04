@@ -19,7 +19,8 @@ public class EmpleatRepo {
     }
 
     private void createEmpleats(){
-        this.empleats.add(new Empleat("Empleat 1", "Jefe", 200.50, 1));
+        // le ponemos una foto al primer empleado, para trastear
+        this.empleats.add(new Empleat("Empleat 1", "Jefe", 200.50, 1, "a.jpg"));
         this.empleats.add(new Empleat("Empleat 2", "Limpieza", 40.80, 2));
         this.empleats.add(new Empleat("Empleat 3", "IT", 875.12, 3));
         this.empleats.add(new Empleat("Empleat 4", "Currela", 21.54, 4));

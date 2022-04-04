@@ -8,8 +8,17 @@ public class Empleat {
     private String name;
     private String position;
     private double salary;
+    private String photo;
 
     
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public Empleat(String name, String position, double salary, int id) {
         this.name = name;
@@ -25,6 +34,22 @@ public class Empleat {
         this.salary = salary;
         this.id = GENERAL_ID;
         GENERAL_ID++;
+    }
+
+    
+    public Empleat(String name, String position, double salary, int id, String photo) {
+        this.name = name;
+        this.position = position;
+        this.salary = salary;
+        this.photo = photo;
+    }
+
+    public static int getGENERAL_ID() {
+        return GENERAL_ID;
+    }
+
+    public static void setGENERAL_ID(int gENERAL_ID) {
+        GENERAL_ID = gENERAL_ID;
     }
 
     public String getName() {
